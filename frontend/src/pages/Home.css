@@ -1,0 +1,8 @@
+.product-item {
+  width: 250px;
+  height: 350px;
+  border: 2px solid rgb(109, 107, 107);
+  margin: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+}
