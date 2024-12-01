@@ -36,8 +36,8 @@ const userSignup = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -71,8 +71,8 @@ const userLogin = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -82,15 +82,14 @@ const userLogout = async (req, res, next) => {
     res.json({ message: 'user logout success.', success: true });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
 const userProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    console.log(user, '=======user');
     // const { id } = req.params;
     const userData = await User.findOne({ _id: user.id });
     return res.json({
@@ -100,8 +99,8 @@ const userProfile = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -109,7 +108,9 @@ const checkUser = async (req, res, next) => {
   try {
     const { user } = req;
     if (!user) {
-      res.status(401).json({ success: false, message: 'User not authorized' });
+      return res
+        .status(401)
+        .json({ success: false, message: 'User not authorized' });
     }
     res.json({
       success: true,
@@ -117,8 +118,8 @@ const checkUser = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -145,8 +146,8 @@ const updateUserProfile = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -169,8 +170,8 @@ const deleteUserAccount = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -185,8 +186,8 @@ const viewUserList = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    // next(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    next(error);
+    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 

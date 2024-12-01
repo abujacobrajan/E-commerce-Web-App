@@ -59,8 +59,6 @@ export const addToCart = async (req, res, next) => {
 export const updateProductQuantityInCart = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    console.log(req.body, 'body');
-
     const { productId, quantity } = req.body;
 
     if (quantity < 1) {

@@ -371,31 +371,6 @@ const CreateProduct = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Rating</label>
-          <input
-            type="number"
-            className="form-control"
-            name="rating"
-            onChange={handleChange}
-            value={formData.rating}
-            required
-            min="0"
-            max="5"
-            step="0.1"
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Number of Reviews</label>
-          <input
-            type="number"
-            className="form-control"
-            name="numReviews"
-            onChange={handleChange}
-            value={formData.numReviews}
-            required
-          />
-        </div>
-        <div className="mb-3">
           <label className="form-label">Product Image</label>
           <input
             type="file"

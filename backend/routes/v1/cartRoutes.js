@@ -11,7 +11,7 @@ import {
 } from '../../controllers/cartControllers.js';
 
 router.post('/add-to-cart', userAuth, addToCart);
-router.put('/remove', userAuth, removeFromCart);
+router.delete('/remove', userAuth, removeFromCart);
 router.put('/update', userAuth, updateProductQuantityInCart);
 router.post('/clear', userAuth, clearCart);
 // router.get('/get', userAuth, getCart);

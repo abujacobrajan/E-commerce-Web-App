@@ -1,9 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { axiosInstance } from '../config/axiosInstance';
 
 const WishListPage = () => {
+  const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch wishlist items from the backend
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const response = await axiosInstance.get('/wishlist');
+        setWishlist(response.data.data.products); // Assuming your backend returns the 'products' array
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching wishlist:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchWishlist();
+  }, []);
+
+  // Remove product from wishlist
+  const removeFromWishlist = async (productId) => {
+    try {
+      // Make a request to the backend to remove the product from wishlist
+      const response = await axiosInstance.delete(
+        `/wishlist/remove/${productId}`
+      );
+      // Update the wishlist in the state by removing the product
+      setWishlist(wishlist.filter((product) => product._id !== productId));
+    } catch (error) {
+      console.error('Error removing product from wishlist:', error);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading your wishlist...</div>;
+  }
+
+  if (wishlist.length === 0) {
+    return <div>Your wishlist is empty.</div>;
+  }
+
   return (
     <div className="min-vh-100">
-      <h2>Your wishlist</h2>
+      <h2>Your Wishlist</h2>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+        {wishlist.map((product) => (
+          <li key={product._id} className="border rounded p-2 mb-2">
+            <img src={product.image} alt={product.name} width={100} />
+            <h4>{product.name}</h4>
+            <p>Price: Rs.{product.price}</p>
+            <button
+              className="btn btn-danger"
+              onClick={() => removeFromWishlist(product._id)}
+            >
+              Remove
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
