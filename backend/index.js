@@ -6,7 +6,6 @@ import apiRouter from './routes/index.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { handleError } from './utils/error.js';
-connectDB();
 
 const app = express();
 
@@ -16,11 +15,16 @@ app.use(
   cors({
     origin: [
       'http://localhost:5173',
-      'https://e-commerce-web-app-steel.vercel.app/',
+      'https://e-commerce-web-app-steel.vercel.app',
     ],
     credentials: true,
   })
 );
+
+connectDB();
+app.get('/', (req, res) => {
+  res.send('Hello world');
+});
 
 app.use('/zentromart', apiRouter);
 
