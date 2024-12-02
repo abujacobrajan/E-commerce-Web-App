@@ -27,7 +27,11 @@ const userSignup = async (req, res, next) => {
 
     const token = generateToken(newUser._id);
 
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
 
     return res.status(201).json({
       success: true,
@@ -64,7 +68,11 @@ const userLogin = async (req, res, next) => {
     }
     const token = generateToken(userExist._id);
 
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
     return res.status(200).json({
       success: true,
       message: 'User login successfull.',
@@ -78,7 +86,11 @@ const userLogin = async (req, res, next) => {
 
 const userLogout = async (req, res, next) => {
   try {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
     res.json({ message: 'user logout success.', success: true });
   } catch (error) {
     console.log(error);

@@ -28,7 +28,11 @@ const adminSignup = async (req, res, next) => {
 
     const token = generateToken(newUser._id);
 
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
 
     return res.status(201).json({
       success: true,
@@ -62,7 +66,11 @@ const adminLogin = async (req, res, next) => {
     }
     const token = generateToken(adminExist._id, 'admin');
 
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
     return res.status(200).json({
       success: true,
       message: 'Admin login successful.',
@@ -76,7 +84,11 @@ const adminLogin = async (req, res, next) => {
 
 const adminLogout = async (req, res, next) => {
   try {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
     res.json({ message: 'Admin logout successful.', success: true });
   } catch (error) {
     res

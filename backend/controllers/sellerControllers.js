@@ -32,7 +32,11 @@ const sellerSignup = async (req, res, next) => {
 
     const token = generateToken(newSeller._id, newSeller.role);
 
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
 
     return res.status(201).json({
       success: true,
@@ -68,7 +72,11 @@ const sellerLogin = async (req, res, next) => {
     }
     const token = generateToken(sellerExist._id, sellerExist.role);
 
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
     return res.status(200).json({
       success: true,
       message: 'Seller login successful.',
@@ -81,7 +89,11 @@ const sellerLogin = async (req, res, next) => {
 
 const sellerLogout = async (req, res, next) => {
   try {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+    });
     res.json({ message: 'Seller logout successful.', success: true });
   } catch (error) {
     console.log(error);
