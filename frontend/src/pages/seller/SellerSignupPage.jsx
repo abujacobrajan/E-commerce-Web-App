@@ -122,14 +122,13 @@ const SellerSignupPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Send data to seller signup endpoint
       const response = await axiosInstance({
         method: 'POST',
-        url: 'seller/sellerSignup',
+        url: 'seller/signup',
         data,
       });
       toast.success('Seller account created successfully');
-      navigate('/seller-login'); // Redirect to seller login page
+      navigate('/seller-login');
     } catch (error) {
       toast.error('Failed to create seller account');
       console.error(error);
@@ -159,7 +158,6 @@ const SellerSignupPage = () => {
                   </div>
 
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    {/* Name Field */}
                     <div className="mb-3">
                       <label className="form-label" htmlFor="name">
                         Your Name
@@ -173,7 +171,6 @@ const SellerSignupPage = () => {
                       />
                     </div>
 
-                    {/* Email Field */}
                     <div className="mb-3">
                       <label className="form-label" htmlFor="email">
                         Your Email
@@ -187,7 +184,6 @@ const SellerSignupPage = () => {
                       />
                     </div>
 
-                    {/* Password Field */}
                     <div className="mb-3">
                       <label className="form-label" htmlFor="password">
                         Password
@@ -201,7 +197,6 @@ const SellerSignupPage = () => {
                       />
                     </div>
 
-                    {/* Confirm Password Field */}
                     <div className="mb-3">
                       <label className="form-label" htmlFor="confirmPassword">
                         Repeat Your Password
@@ -215,7 +210,6 @@ const SellerSignupPage = () => {
                       />
                     </div>
 
-                    {/* Terms Checkbox */}
                     <div className="form-check d-flex justify-content-center mb-4">
                       <input
                         className="form-check-input me-2"
@@ -231,7 +225,6 @@ const SellerSignupPage = () => {
                       </label>
                     </div>
 
-                    {/* Submit Button */}
                     <div className="d-flex justify-content-center">
                       <button
                         type="submit"
@@ -241,7 +234,6 @@ const SellerSignupPage = () => {
                       </button>
                     </div>
 
-                    {/* Login Redirect */}
                     <p className="text-center text-muted mt-3 mb-0">
                       Already have a seller account?{' '}
                       <Link to="/seller-login">
