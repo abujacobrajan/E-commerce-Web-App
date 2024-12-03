@@ -1,19 +1,7 @@
-// const handleError = (error, req, res, next) => {
-//   const statusCode = error.statusCode || 500;
-//   const message = error.message || 'Something went wrong';
-
-//   res.status(statusCode).json({
-//     success: false,
-//     message,
-//   });
-// };
-
-// export { handleError };
-
 const handleError = async (error, req, res, next) => {
   try {
     const statusCode = error.statusCode || 500;
-    const message = error.message || 'Something went wrong';
+    const message = error.message || 'Something went wrongg';
     res.status(statusCode).message({ message });
   } catch (error) {
     res

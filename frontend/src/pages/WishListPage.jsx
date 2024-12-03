@@ -5,12 +5,11 @@ const WishListPage = () => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch wishlist items from the backend
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
         const response = await axiosInstance.get('/wishlist');
-        setWishlist(response.data.data.products); // Assuming your backend returns the 'products' array
+        setWishlist(response.data.data.products);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching wishlist:', error);
@@ -21,14 +20,12 @@ const WishListPage = () => {
     fetchWishlist();
   }, []);
 
-  // Remove product from wishlist
   const removeFromWishlist = async (productId) => {
     try {
-      // Make a request to the backend to remove the product from wishlist
       const response = await axiosInstance.delete(
         `/wishlist/remove/${productId}`
       );
-      // Update the wishlist in the state by removing the product
+
       setWishlist(wishlist.filter((product) => product._id !== productId));
     } catch (error) {
       console.error('Error removing product from wishlist:', error);

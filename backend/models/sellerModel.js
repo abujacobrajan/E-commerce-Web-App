@@ -22,11 +22,9 @@ const sellerSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
     },
     address: {
       type: String,
-      required: true,
     },
     profilePic: {
       type: String,
@@ -35,7 +33,6 @@ const sellerSchema = new mongoose.Schema(
     },
     businessName: {
       type: String,
-      required: true,
     },
     products: [
       {

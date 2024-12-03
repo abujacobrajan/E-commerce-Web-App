@@ -15,7 +15,7 @@ const UserHeader = () => {
         method: 'POST',
         url: 'user/logout',
       });
-      navigate('/'); // Redirect after logout
+      navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -23,16 +23,13 @@ const UserHeader = () => {
 
   return (
     <div className="Header d-flex justify-content-between align-items-center p-3">
-      {/* Logo Section */}
       <div className="Logo">
         <Link to="/user/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h2>Zentromart</h2>
         </Link>
       </div>
 
-      {/* Right-side Elements */}
       <div className="RightSideElements d-flex align-items-center">
-        {/* Wishlist Button */}
         <Link
           to="/user/wishlist"
           className="me-3"
@@ -41,7 +38,6 @@ const UserHeader = () => {
           <TbShoppingBagHeart />
         </Link>
 
-        {/* Cart Logo */}
         <Link
           to="/user/cart"
           className="me-3"
@@ -50,7 +46,6 @@ const UserHeader = () => {
           <FiShoppingCart />
         </Link>
 
-        {/* Profile Logo */}
         <Link
           to="/user/profile"
           className="me-3"
@@ -59,7 +54,6 @@ const UserHeader = () => {
           <CgProfile />
         </Link>
 
-        {/* Logout Button */}
         <button
           type="button"
           className="btn btn-outline-light"

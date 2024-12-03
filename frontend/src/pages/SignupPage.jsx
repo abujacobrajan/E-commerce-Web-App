@@ -12,14 +12,13 @@ const SignupPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Send a POST request to the signup endpoint
       const response = await axiosInstance({
         method: 'POST',
         url: 'user/signup',
         data,
       });
       toast.success('Registration successful');
-      navigate('/login'); // Redirect to login page after successful signup
+      navigate('/login');
     } catch (error) {
       toast.error('Registration failed');
       console.error(error);
@@ -48,7 +47,6 @@ const SignupPage = () => {
                     </p>
                   </div>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    {/* Name Field */}
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="name">
                         Your Name
@@ -62,7 +60,6 @@ const SignupPage = () => {
                       />
                     </div>
 
-                    {/* Email Field */}
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="email">
                         Your Email
@@ -76,7 +73,6 @@ const SignupPage = () => {
                       />
                     </div>
 
-                    {/* Password Field */}
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="password">
                         Password
@@ -90,7 +86,6 @@ const SignupPage = () => {
                       />
                     </div>
 
-                    {/* Confirm Password Field */}
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="confirmPassword">
                         Confirm Password
@@ -104,7 +99,6 @@ const SignupPage = () => {
                       />
                     </div>
 
-                    {/* Terms Checkbox */}
                     <div className="form-check d-flex justify-content-center mb-4">
                       <input
                         className="form-check-input me-2"
@@ -120,7 +114,6 @@ const SignupPage = () => {
                       </label>
                     </div>
 
-                    {/* Submit Button */}
                     <div className="text-center text-lg-start mt-4 pt-2">
                       <button
                         type="submit"

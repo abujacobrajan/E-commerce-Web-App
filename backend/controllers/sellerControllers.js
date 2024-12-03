@@ -6,7 +6,7 @@ const sellerSignup = async (req, res, next) => {
   try {
     const { name, email, password, phone, address, businessName, profilePic } =
       req.body;
-    if (!name || !email || !password || !phone || !address || !businessName) {
+    if (!name || !email || !password) {
       return res
         .status(400)
         .json({ success: false, message: 'All fields are required' });
