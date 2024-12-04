@@ -12,7 +12,7 @@ const sellerAuth = (req, res, next) => {
 
     const tokenVerified = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    if (tokenVerified.role !== 'seller') {
+    if (tokenVerified.role !== 'seller' && tokenVerified.role !== 'admin') {
       return res.status(403).json({
         success: false,
         message: 'Seller not authorized. Insufficient permissions.',
