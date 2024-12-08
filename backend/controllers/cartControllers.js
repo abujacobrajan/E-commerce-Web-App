@@ -161,12 +161,11 @@ export const getCart = async (req, res, next) => {
     const userId = req.user.id;
     let cart = await Cart.findOne({ userId }).populate('products.productId');
 
-    // Check if the cart is empty and return an empty cart instead of a sample product
     if (!cart) {
       cart = {
         userId,
-        products: [], // Empty cart if no products
-        totalPrice: 0, // Initialize totalPrice to 0
+        products: [],
+        totalPrice: 0,
       };
     }
 
