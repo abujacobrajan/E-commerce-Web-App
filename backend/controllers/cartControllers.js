@@ -161,29 +161,18 @@ export const getCart = async (req, res, next) => {
     const userId = req.user.id;
     let cart = await Cart.findOne({ userId }).populate('products.productId');
 
+    // Check if the cart is empty and return an empty cart instead of a sample product
     if (!cart) {
       cart = {
         userId,
-        products: [],
-        totalPrice: 0,
+        products: [], // Empty cart if no products
+        totalPrice: 0, // Initialize totalPrice to 0
       };
     }
 
     res.status(200).json({
       success: true,
       message: 'Cart retrieved successfully.',
-      data: cart,
-    });
-  } catch (error) {
-    console.error('Error in getCart:', error);
-    next(error);
-  }
-};
-
-
-    res.status(200).json({
-      success: true,
-      message: 'Cart retrieved successfully with a sample product.',
       data: cart,
     });
   } catch (error) {
