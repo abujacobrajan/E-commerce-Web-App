@@ -164,20 +164,22 @@ export const getCart = async (req, res, next) => {
     if (!cart) {
       cart = {
         userId,
-        products: [
-          {
-            productId: {
-              _id: 'dummyProductId123',
-              name: 'Sample Product',
-              price: 20.0,
-              description: 'This is a sample product.',
-              imageUrl: 'https://example.com/sample-product.jpg',
-            },
-            quantity: 1,
-          },
-        ],
+        products: [],
+        totalPrice: 0,
       };
     }
+
+    res.status(200).json({
+      success: true,
+      message: 'Cart retrieved successfully.',
+      data: cart,
+    });
+  } catch (error) {
+    console.error('Error in getCart:', error);
+    next(error);
+  }
+};
+
 
     res.status(200).json({
       success: true,

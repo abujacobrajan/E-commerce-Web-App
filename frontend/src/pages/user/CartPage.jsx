@@ -105,7 +105,7 @@ const CartPage = () => {
               <p>Price: Rs.{item.productId.price}</p>
 
               <p>
-                Quantity:
+                Quantity :
                 <button
                   onClick={() =>
                     updateQuantity(item.productId._id, item.quantity - 1)
