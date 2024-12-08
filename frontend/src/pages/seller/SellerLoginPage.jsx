@@ -17,7 +17,6 @@ const SellerLoginPage = () => {
         url: 'seller/login',
         data,
       });
-      console.log(response, '=======response');
       toast.success('Log-in successful');
       navigate('/seller/profile');
     } catch (error) {

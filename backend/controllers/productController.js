@@ -5,26 +5,25 @@ import { handleImageUpload } from '../utils/imageUpload.js';
 
 const createProduct = async (req, res, next) => {
   try {
-    console.log('Creating product. User:', req.user);
+    const user = req.user;
+    // console.log('user in product', user);
+    // console.log('Creating product. User:', req.user);
 
     const {
       name,
+      image,
       brand,
       category,
       description,
       price,
       countInStock,
       rating,
-      numReviews,
     } = req.body;
 
     let imageUrl;
 
-    const image = req.file ? req.file.path : null;
-
     if (
       !name ||
-      !image ||
       !brand ||
       !category ||
       !description ||
@@ -53,12 +52,9 @@ const createProduct = async (req, res, next) => {
       description,
       price,
       countInStock,
-      rating,
-      numReviews,
       seller: req.user.id,
     });
-    console.log(req.user);
-
+    if (user.role == 'seller') newProduct.seller = user.id;
     await newProduct.save();
 
     res.status(201).json({
@@ -74,21 +70,13 @@ const createProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const {
-      name,
-      brand,
-      category,
-      description,
-      price,
-      countInStock,
-      rating,
-      numReviews,
-    } = req.body;
+    const { productId } = req.params;
+    const { name, brand, category, description, price, countInStock } =
+      req.body;
 
     let imageUrl;
 
-    if (!id) {
+    if (!productId) {
       return res.status(400).json({ message: 'Product ID is required' });
     }
     if (req.file) {
@@ -102,8 +90,6 @@ const updateProduct = async (req, res, next) => {
       description,
       price,
       countInStock,
-      rating,
-      numReviews,
       image: imageUrl,
     };
     Object.keys(updateFields).forEach(
@@ -111,7 +97,7 @@ const updateProduct = async (req, res, next) => {
     );
     if (name) {
       const existingProduct = await Product.findOne({ name });
-      if (existingProduct && existingProduct._id.toString() !== id) {
+      if (existingProduct && existingProduct._id.toString() !== productId) {
         return res.status(400).json({
           success: false,
           message: `Product with the name "${name}" already exists.`,
@@ -119,7 +105,7 @@ const updateProduct = async (req, res, next) => {
       }
     }
     const product = await Product.findOneAndUpdate(
-      { _id: id },
+      { _id: productId },
       { $set: updateFields },
       { new: true, runValidators: true }
     );
@@ -148,8 +134,6 @@ const updateProduct = async (req, res, next) => {
 
 const listAllProducts = async (req, res, next) => {
   try {
-    console.log('List all products route hit.');
-
     const products = await Product.find();
 
     res.status(200).json({
@@ -164,11 +148,18 @@ const listAllProducts = async (req, res, next) => {
 
 const getProductById = async (req, res, next) => {
   try {
-    console.log('Get product by ID route hit.');
+    const { productId } = req.params;
 
-    const { id } = req.params;
+    const product = await Product.findById(productId)
+      .populate('seller', 'name email')
+      .populate({
+        path: 'reviews',
+        populate: {
+          path: 'user',
+          select: 'name',
+        },
+      });
 
-    const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -187,11 +178,11 @@ const deleteProduct = async (req, res, next) => {
   try {
     console.log('Delete product by ID route hit.');
 
-    const { id } = req.params;
+    const { productId } = req.params;
 
-    const product = await Product.findByIdAndDelete(id);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+    const productDeleted = await Product.findByIdAndDelete({ _id: productId });
+    if (!productDeleted) {
+      return res.status(404).json({ message: 'Product already deleted.' });
     }
 
     res.status(200).json({
@@ -206,7 +197,7 @@ const deleteProduct = async (req, res, next) => {
 
 const listSellerProducts = async (req, res, next) => {
   try {
-    const sellerId = req.user._id;
+    const sellerId = req.user.id;
     console.log('Seller ID:', sellerId);
     const products = await Product.find({ seller: sellerId });
     console.log('Products found:', products);

@@ -24,7 +24,11 @@ const sellerSchema = new mongoose.Schema(
       type: String,
     },
     address: {
-      type: String,
+      building: String,
+      street: String,
+      district: String,
+      state: String,
+      pin: String,
     },
     profilePic: {
       type: String,

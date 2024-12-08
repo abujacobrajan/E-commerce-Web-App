@@ -4,7 +4,7 @@ import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,7 +12,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axiosInstance.get(`/products/${id}`);
+        const response = await axiosInstance.get(`/products/${productId}`);
         setProduct(response.data.data);
         setLoading(false);
       } catch (error) {
@@ -23,7 +23,7 @@ const ProductDetails = () => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [productId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -35,13 +35,12 @@ const ProductDetails = () => {
         method: 'POST',
         data: { productId: product._id },
       });
-      console.log(response);
       toast.success('Product added to cart');
     } catch (error) {
-      console.log(error);
       toast.error('Product could not add to cart');
     }
   };
+
   const addToWishlist = async () => {
     try {
       const response = await axiosInstance({
@@ -49,10 +48,8 @@ const ProductDetails = () => {
         method: 'POST',
         data: { productId: product._id },
       });
-      console.log(response);
       toast.success('Product added to wishlist');
     } catch (error) {
-      console.error('Error adding product to wishlist:', error);
       toast.error('Failed to add product to wishlist');
     }
   };
@@ -60,7 +57,7 @@ const ProductDetails = () => {
   return (
     <div>
       {product ? (
-        <div className="p-2 ">
+        <div className="p-2">
           <h1>{product?.name}</h1>
           <img
             src={product?.image}
@@ -76,12 +73,23 @@ const ProductDetails = () => {
           <p>
             <strong>Description:</strong> {product?.description}
           </p>
-
           <p>
             <strong>In Stock:</strong> {product?.countInStock}
           </p>
           <p>
-            <strong>Rating:</strong> {product?.rating} / 5
+            <strong>Rating:</strong>{' '}
+            {product?.reviews && product.reviews.length > 0
+              ? (
+                  product.reviews.reduce(
+                    (sum, review) => sum + review.rating,
+                    0
+                  ) / product.reviews.length
+                ).toFixed(1)
+              : 'No ratings yet'}
+          </p>
+
+          <p>
+            <strong>Seller:</strong> {product?.seller?.name || 'Unknown Seller'}
           </p>
           <button onClick={addToCart} className="btn btn-warning">
             Add to cart
@@ -96,15 +104,15 @@ const ProductDetails = () => {
           <ul>
             {product?.reviews && product.reviews.length > 0 ? (
               product.reviews.map((review) => (
-                <li key={review?._id} className="border rounded p-2 mb-2">
+                <li key={review._id} className="border rounded p-2 mb-2">
                   <p>
                     <strong>User:</strong> {review?.user?.name || 'Anonymous'}
                   </p>
                   <p>
-                    <strong>Comment:</strong> {review?.comment}
+                    <strong>Comment:</strong> {review.comment}
                   </p>
                   <p>
-                    <strong>Rating:</strong> {review?.rating} / 5
+                    <strong>Rating:</strong> {review.rating} / 5
                   </p>
                 </li>
               ))

@@ -39,7 +39,7 @@ const SellerHeader = () => {
           <CgProfile />
         </Link>
 
-        <Link to="/seller/products">
+        <Link to="/seller/seller-products">
           <button type="button" className="btn btn-outline-light me-2">
             Your Products
           </button>

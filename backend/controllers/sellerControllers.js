@@ -1,6 +1,7 @@
 import { Seller } from '../models/sellerModel.js';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/token.js';
+import { handleImageUpload } from '../utils/imageUpload.js';
 
 const sellerSignup = async (req, res, next) => {
   try {
@@ -119,27 +120,57 @@ const sellerProfile = async (req, res, next) => {
 const updateSellerProfile = async (req, res, next) => {
   try {
     const sellerId = req.user.id;
-    const { name, email, phone, address, profilePic, businessName } = req.body;
+
+    const { name, email, phone, address, password, businessName, status } =
+      req.body;
+
+    let imageUrl;
+
+    if (req.file) {
+      imageUrl = await handleImageUpload(req.file.path);
+    }
+
+    const updateFields = {
+      name,
+      email,
+      phone,
+      address: address ? JSON.parse(address) : undefined,
+      profilePic: imageUrl || req.body.profilePic,
+      businessName,
+      status,
+    };
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateFields.password = hashedPassword;
+    }
+
+    const filteredUpdates = Object.fromEntries(
+      Object.entries(updateFields).filter(([_, value]) => value !== undefined)
+    );
 
     const updatedSeller = await Seller.findByIdAndUpdate(
       sellerId,
-      { name, email, phone, address, profilePic, businessName },
-      { new: true, runValidators: true }
+      filteredUpdates,
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     if (!updatedSeller) {
       return res
         .status(404)
-        .json({ success: false, message: 'Seller not found.' });
+        .json({ success: false, message: 'User not found.' });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Seller profile updated successfully.',
-      seller: updatedSeller,
+      message: 'User profile updated successfully.',
+      user: updatedSeller,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     next(error);
   }
 };

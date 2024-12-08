@@ -9,11 +9,18 @@ const userAuth = (req, res, next) => {
         .json({ success: false, message: 'User not authorized.' });
     }
     const tokenVerified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (!tokenVerified) {
-      return res
-        .status(401)
-        .json({ success: false, message: 'User not authorized' });
+    // if (!tokenVerified) {
+    //   return res
+    //     .status(401)
+    //     .json({ success: false, message: 'User not authorized' });
+    // }
+    if (tokenVerified.role !== 'user') {
+      return res.status(403).json({
+        success: false,
+        message: 'User not authorized.',
+      });
     }
+
     req.user = tokenVerified;
 
     next();

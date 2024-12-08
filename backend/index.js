@@ -6,11 +6,13 @@ import apiRouter from './routes/index.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { handleError } from './utils/error.js';
+import bodyParser from 'body-parser';
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(
   cors({
     origin: [

@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
         element: <SignupPage />,
       },
       {
-        path: 'products/:id',
+        path: 'products/:productId',
         element: <ProductDetails />,
       },
     ],
@@ -67,7 +67,7 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: 'products/:id',
+        path: 'products/:productId',
         element: <ProductDetails />,
       },
     ],
@@ -98,7 +98,7 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: 'products/:id',
+        path: 'products/:productId',
         element: <ProductDetails />,
       },
       {
@@ -106,7 +106,7 @@ export const router = createBrowserRouter([
         element: <CreateProduct />,
       },
       {
-        path: 'products',
+        path: 'seller-products',
         element: <SellerProducts />,
       },
     ],

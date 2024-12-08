@@ -19,9 +19,7 @@ const CreateProduct = () => {
   const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-    console.log('LocalStorage contents:', localStorage);
     const sellerId = localStorage.getItem('sellerId');
-    console.log('Seller ID from localStorage:', sellerId);
   }, []);
 
   const handleChange = (e) => {
@@ -48,7 +46,6 @@ const CreateProduct = () => {
     e.preventDefault();
 
     const sellerId = localStorage.getItem('sellerId');
-    console.log('Seller ID from localStorage:', sellerId);
 
     if (!sellerId) {
       toast.error('Seller is not authenticated');
@@ -76,7 +73,6 @@ const CreateProduct = () => {
           withCredentials: true,
         }
       );
-      console.log('Product added successfully:', response.data);
       toast.success('Product added successfully');
     } catch (error) {
       console.error('Error adding product:', error.response?.data || error);

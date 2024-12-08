@@ -8,7 +8,6 @@ const SellerProducts = () => {
     const fetchSellerProducts = async () => {
       try {
         const response = await axiosInstance.get('/products/seller-products');
-        console.log(response.data);
         setProducts(response.data.data || []);
       } catch (error) {
         console.error('Error fetching seller products:', error);
@@ -17,6 +16,18 @@ const SellerProducts = () => {
 
     fetchSellerProducts();
   }, []);
+
+  const deleteFromPoroductsList = async (productId) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/products/delete/${productId}`
+      );
+
+      setProducts(products.filter((product) => product._id !== productId));
+    } catch (error) {
+      console.error('Error removing product from wishlist:', error);
+    }
+  };
 
   return (
     <div className="container mt-4">
@@ -38,7 +49,12 @@ const SellerProducts = () => {
                   <h5 className="card-title">{product.name}</h5>
                   <p className="card-text">Price: ${product.price}</p>
                   <p className="card-text">{product.description}</p>
-                  <button className="btn btn-danger">Delete</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => deleteFromPoroductsList(product._id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>

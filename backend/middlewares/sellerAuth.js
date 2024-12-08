@@ -20,8 +20,6 @@ const sellerAuth = (req, res, next) => {
     }
 
     req.user = tokenVerified;
-    console.log('Seller authenticated:', req.user);
-
     next();
   } catch (error) {
     console.error('Error in sellerAuth middleware:', error);

@@ -1,9 +1,12 @@
 import { User } from '../models/userModel.js';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/token.js';
+import { handleImageUpload } from '../utils/imageUpload.js';
+
 const userSignup = async (req, res, next) => {
   try {
-    const { name, email, password, phone, profilePic, address } = req.body;
+    const { name, email, password, phone, role, profilePic, address } =
+      req.body;
     if (!name || !email || !password) {
       return res
         .status(400)
@@ -23,9 +26,10 @@ const userSignup = async (req, res, next) => {
       phone,
       profilePic,
       address,
+      role,
     });
 
-    const token = generateToken(newUser._id);
+    const token = generateToken(newUser._id, newUser.role);
 
     res.cookie('token', token, {
       sameSite: 'None',
@@ -138,12 +142,37 @@ const checkUser = async (req, res, next) => {
 const updateUserProfile = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const { name, email, phone, profilePic } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { name, email, phone, profilePic },
-      { new: true, runValidators: true }
+
+    const { name, email, phone, address, password } = req.body;
+    console.log('==++++==pin', address);
+
+    let imageUrl;
+
+    if (req.file) {
+      imageUrl = await handleImageUpload(req.file.path);
+    }
+
+    const updateFields = {
+      name,
+      email,
+      phone,
+      address: address ? JSON.parse(address) : undefined,
+      profilePic: imageUrl || req.body.profilePic,
+    };
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateFields.password = hashedPassword;
+    }
+
+    const filteredUpdates = Object.fromEntries(
+      Object.entries(updateFields).filter(([_, value]) => value !== undefined)
     );
+
+    const updatedUser = await User.findByIdAndUpdate(userId, filteredUpdates, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedUser) {
       return res
@@ -157,9 +186,8 @@ const updateUserProfile = async (req, res, next) => {
       user: updatedUser,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     next(error);
-    // res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 

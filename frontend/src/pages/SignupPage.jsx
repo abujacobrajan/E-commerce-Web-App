@@ -18,7 +18,7 @@ const SignupPage = () => {
         data,
       });
       toast.success('Registration successful');
-      navigate('/login');
+      navigate('/user/');
     } catch (error) {
       toast.error('Registration failed');
       console.error(error);
