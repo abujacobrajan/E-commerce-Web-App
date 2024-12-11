@@ -17,6 +17,8 @@ import AuthSeller from './protectedRoutes/AuthSeller.jsx';
 import ErrorPage from '../pages/ErrorPage.jsx';
 import CreateProduct from '../pages/seller/CreateProduct.jsx';
 import SellerProducts from '../pages/seller/SellerProducts.jsx';
+import SuccessPage from '../pages/user/SuccessPage.jsx';
+import CancelPage from '../pages/user/CancelPage.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ export const router = createBrowserRouter([
       {
         path: 'products/:productId',
         element: <ProductDetails />,
+      },
+      {
+        path: 'payment/success',
+        element: <SuccessPage />,
+      },
+      {
+        path: 'payment/cancell',
+        element: <CancelPage />,
       },
     ],
   },

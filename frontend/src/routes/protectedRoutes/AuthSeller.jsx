@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { axiosInstance } from '../../config/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 const AuthSeller = ({ children }) => {
   const [isSeller, setIsSeller] = useState(false);
+  const [sellerId, setSellerId] = useState(null);
   const navigate = useNavigate();
 
   const checkSeller = async () => {
     try {
-      await axiosInstance({
-        method: 'GET',
-        url: 'seller/check-seller',
-      });
-      setIsSeller(true);
+      const response = await axiosInstance.get('/seller/check-seller');
+      if (response.data.success) {
+        setIsSeller(true);
+        setSellerId(response.data.sellerId);
+      }
     } catch (error) {
       setIsSeller(false);
-      console.log(error);
+      console.error(error);
       navigate('/seller-login');
     }
   };
@@ -25,7 +26,7 @@ const AuthSeller = ({ children }) => {
     checkSeller();
   }, []);
 
-  return isSeller ? children : null;
+  return isSeller ? React.cloneElement(children, { sellerId }) : null;
 };
 
 AuthSeller.propTypes = {

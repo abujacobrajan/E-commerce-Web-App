@@ -20,6 +20,7 @@ app.use(
       'https://e-commerce-web-app-steel.vercel.app',
     ],
     credentials: true,
+    methods: ['POST', 'GET', 'PUT', 'DELETE', 'PATCH', 'OPTION'],
   })
 );
 

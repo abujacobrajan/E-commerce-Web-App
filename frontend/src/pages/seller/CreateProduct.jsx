@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance } from '../../config/axiosInstance.js';
+import { axiosInstance } from '../../config/axiosInstance';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({
@@ -17,10 +18,28 @@ const CreateProduct = () => {
   });
 
   const [imagePreview, setImagePreview] = useState(null);
+  const [sellerId, setSellerId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const sellerId = localStorage.getItem('sellerId');
-  }, []);
+    const fetchSellerData = async () => {
+      try {
+        const response = await axiosInstance.get('/seller/check-seller');
+        if (response.data.success) {
+          setSellerId(response.data.sellerId);
+        } else {
+          toast.error('Seller is not authenticated');
+          navigate('/seller-login');
+        }
+      } catch (error) {
+        console.error('Error fetching seller data:', error);
+        toast.error('Error checking seller authentication');
+        navigate('/seller-login');
+      }
+    };
+
+    fetchSellerData();
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,22 +64,17 @@ const CreateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const sellerId = localStorage.getItem('sellerId');
-
     if (!sellerId) {
       toast.error('Seller is not authenticated');
-      console.log('Seller is not authenticated');
       return;
     }
 
     const formDataToSend = new FormData();
-
     for (const key in formData) {
       formDataToSend.append(key, formData[key]);
     }
 
     formDataToSend.append('seller', sellerId);
-    console.log('FormData being sent:', formDataToSend);
 
     try {
       const response = await axiosInstance.post(

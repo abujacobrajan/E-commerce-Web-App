@@ -218,7 +218,12 @@ const checkSeller = async (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
-    res.json({ success: true, message: 'Seller is authenticated' });
+
+    res.json({
+      success: true,
+      message: 'Seller is authenticated',
+      sellerId: req.user.id,
+    });
   } catch (error) {
     console.log(error);
     next(error);

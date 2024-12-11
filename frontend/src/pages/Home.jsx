@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import { axiosInstance } from '../config/axiosInstance.js';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -43,11 +43,25 @@ const Home = () => {
     }
   };
 
+  const checkAuth = async () => {
+    if (!isUserLoggedIn) await checkUser();
+    if (!isSellerLoggedIn) await checkSeller();
+  };
+
   useEffect(() => {
     fetchProducts();
-    checkUser();
-    checkSeller();
+    checkAuth();
   }, []);
+
+  const handleProductClick = (productId) => {
+    if (isSellerLoggedIn) {
+      navigate(`/seller/products/${productId}`);
+    } else if (isUserLoggedIn) {
+      navigate(`/user/products/${productId}`);
+    } else {
+      navigate(`/products/${productId}`);
+    }
+  };
 
   if (loading) return <div>Loading products...</div>;
   if (error) return <div>{error}</div>;
@@ -56,27 +70,20 @@ const Home = () => {
     <div>
       <div className="productList d-inline-flex flex-wrap">
         {products.map((product) => (
-          <div key={product._id} className="product-item">
-            <Link
-              to={
-                isSellerLoggedIn
-                  ? `/seller/products/${product._id}`
-                  : isUserLoggedIn
-                  ? `/user/products/${product._id}`
-                  : `/products/${product._id}`
-              }
-              className="product-link"
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                style={{ width: '200px', height: '200px' }}
-              />
-              <h5>{product.name}</h5>
-              <p>{product.description}</p>
-              <p>Price: Rs.{product.price}</p>
-            </Link>
+          <div
+            key={product._id}
+            className="product-item"
+            onClick={() => handleProductClick(product._id)}
+            style={{ cursor: 'pointer' }}
+          >
+            <img
+              src={product.image}
+              alt={product.name}
+              style={{ width: '200px', height: '200px' }}
+            />
+            <h5>{product.name}</h5>
+            <p>{product.description}</p>
+            <p>Price: Rs.{product.price}</p>
           </div>
         ))}
       </div>

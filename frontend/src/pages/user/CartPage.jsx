@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { axiosInstance } from '../../config/axiosInstance.js';
+import { loadStripe } from '@stripe/stripe-js';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState(null);
@@ -19,6 +20,35 @@ const CartPage = () => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+    }
+  };
+
+  const makePayment = async () => {
+    try {
+      const stripe = await loadStripe(
+        import.meta.env.VITE_STRIPE_Publishable_key
+      );
+
+      const formattedProducts = cartItems.products.map((item) => ({
+        name: item.productId.name,
+        image: item.productId.image,
+        price: item.productId.price,
+        quantity: item.quantity,
+      }));
+
+      console.log('Formatted products data:', formattedProducts);
+
+      const session = await axiosInstance({
+        url: '/payment/create-checkout-session',
+        method: 'POST',
+        data: { products: formattedProducts },
+      });
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: session?.data?.sessionId,
+      });
+    } catch (error) {
+      console.error('Error in makePayment:', error);
     }
   };
 
@@ -141,6 +171,7 @@ const CartPage = () => {
           type="button"
           className="btn btn-warning btn-rounded"
           data-mdb-ripple-init
+          onClick={makePayment}
         >
           Check Out
         </button>
