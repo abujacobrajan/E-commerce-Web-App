@@ -117,7 +117,7 @@ const CartPage = () => {
   }
 
   return (
-    <div>
+    <div style={{ minHeight: '100vh' }}>
       <h3>This is your shopping cart.</h3>
       <div>
         <ul style={{ listStyleType: 'none', padding: 0 }} className="m-2">

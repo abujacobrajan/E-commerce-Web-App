@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { axiosInstance } from '../../config/axiosInstance';
 import toast from 'react-hot-toast';
 import './SellerLoginPage.css';
+import { FaHome } from 'react-icons/fa';
 
 const SellerLoginPage = () => {
   const { register, handleSubmit } = useForm();
@@ -17,8 +18,14 @@ const SellerLoginPage = () => {
         url: 'seller/login',
         data,
       });
+      const role = response.data.role;
+      console.log('======main project role', role);
+      if (role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/seller/profile');
+      }
       toast.success('Log-in successful');
-      navigate('/seller/profile');
     } catch (error) {
       toast.error('Log-in failed');
       console.log(error);
@@ -86,13 +93,20 @@ const SellerLoginPage = () => {
                 </a>
               </div>
 
-              <div className="text-center text-lg-start mt-4 pt-2">
+              <div className="text-center text-lg-start mt-4 pt-2 d-flex align-items-center">
                 <button
                   type="submit"
                   className="btn btn-primary btn-lg"
                   style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
                 >
                   Login
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-lg d-flex gap-2 ms-3 me-3"
+                  onClick={() => navigate('/')}
+                >
+                  <FaHome />
                 </button>
                 <p className="small fw-bold mt-2 pt-1 mb-0">
                   Don't have a seller account?{' '}

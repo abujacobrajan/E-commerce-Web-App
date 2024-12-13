@@ -21,6 +21,7 @@ router.post('/logout', userAuth, userLogout);
 router.get('/profile', userAuth, userProfile);
 router.put('/update', userAuth, upload.single('profilePic'), updateUserProfile);
 router.delete('/delete', userAuth, deleteUserAccount);
+// router.delete('/delete/:userId', userAuth, deleteUserAccount);
 router.get('/userslist', userAuth, viewUserList);
 router.get('/check-user', userAuth, checkUser);
 

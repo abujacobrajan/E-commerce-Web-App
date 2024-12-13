@@ -14,7 +14,7 @@ const userAuth = (req, res, next) => {
     //     .status(401)
     //     .json({ success: false, message: 'User not authorized' });
     // }
-    if (tokenVerified.role !== 'user') {
+    if (tokenVerified.role !== 'user' && tokenVerified.role !== 'admin') {
       return res.status(403).json({
         success: false,
         message: 'User not authorized.',

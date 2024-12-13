@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import Footer from '../components/Footer.jsx';
 import { Outlet } from 'react-router-dom';
-import UserHeader from '../components/user/UserHeader.jsx';
 import { axiosInstance } from '../config/axiosInstance.js';
+import SellerHeader from '../components/seller/SellerHeader.jsx';
 
-const UserLayout = () => {
-  const [user, setUser] = useState(null);
+const AdminLayout = () => {
+  const [admin, setAdmin] = useState(null);
 
-  const fetchUserProfile = async () => {
+  const fetchAdminProfile = async () => {
     try {
-      const response = await axiosInstance.get('user/profile');
-      setUser(response.data.data);
+      const response = await axiosInstance.get('admin/profile');
+      setAdmin(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchUserProfile();
+    fetchAdminProfile();
   }, []);
 
   return (
     <div className="d-flex flex-column h-100" style={{ minHeight: '100vh' }}>
-      <UserHeader user={user} />
-      <div className="flex-fill">
+      <SellerHeader admin={admin} />
+      <main className="container flex-fill py-4">
         <Outlet />
-      </div>
+      </main>
       <Footer />
     </div>
   );
 };
 
-export default UserLayout;
+export default AdminLayout;

@@ -53,7 +53,7 @@ router.post('/create-checkout-session', userAuth, async (req, res, next) => {
   }
 });
 
-router.get('/session-status', async (req, res) => {
+router.get('/session-status', userAuth, async (req, res) => {
   try {
     const userId = req.user.id;
     const orderDetails = await Order.findOne({ userId });
@@ -65,10 +65,15 @@ router.get('/session-status', async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    // res.send({
+    //   status: session?.status,
+    //   customer_email: session?.customer_details?.email,
+    // });
 
     res.json({
-      status: session?.status,
-      customer_email: session?.customer_details?.email,
+      message: 'Succesfully fetched order details',
+      success: true,
+      data: session,
     });
   } catch (error) {
     console.error('Error retrieving session status:', error);

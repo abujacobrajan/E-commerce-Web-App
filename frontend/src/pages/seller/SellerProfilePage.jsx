@@ -19,6 +19,7 @@ const SellerProfilePage = () => {
     profilePic: null,
     businessName: '',
     status: 'active',
+    role: '',
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -28,6 +29,7 @@ const SellerProfilePage = () => {
 
   const [profilePicPreview, setProfilePicPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,6 +52,7 @@ const SellerProfilePage = () => {
           profilePic: null,
           businessName: sellerData.businessName || '',
           status: sellerData.status || 'active',
+          role: sellerData.role || '',
         });
 
         setProfilePicPreview(sellerData.profilePic || null);
@@ -133,6 +136,17 @@ const SellerProfilePage = () => {
       navigate('/');
     } catch (error) {
       toast.error('Failed to logout.');
+      console.error(error);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await axiosInstance.delete('/seller/delete');
+      toast.success('Account deleted successfully!');
+      navigate('/');
+    } catch (error) {
+      toast.error('Failed to delete account.');
       console.error(error);
     }
   };
@@ -334,8 +348,59 @@ const SellerProfilePage = () => {
                 <button className="btn btn-danger ms-3" onClick={handleLogout}>
                   Logout
                 </button>
+                <button
+                  className="btn btn-danger ms-3"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  Delete Account
+                </button>
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`modal fade ${isModalOpen ? 'show' : ''}`}
+        tabIndex="-1"
+        style={{ display: isModalOpen ? 'block' : 'none' }}
+        aria-labelledby="deleteAccountModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="deleteAccountModalLabel">
+                Confirm Account Deletion
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                onClick={() => setIsModalOpen(false)}
+              />
+            </div>
+            <div className="modal-body">
+              Are you sure you want to delete your account? This action cannot
+              be undone.
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleDeleteAccount}
+              >
+                Delete Account
+              </button>
+            </div>
           </div>
         </div>
       </div>

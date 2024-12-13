@@ -144,7 +144,6 @@ const updateUserProfile = async (req, res, next) => {
     const userId = req.user.id;
 
     const { name, email, phone, address, password } = req.body;
-    console.log('==++++==pin', address);
 
     let imageUrl;
 
@@ -194,6 +193,7 @@ const updateUserProfile = async (req, res, next) => {
 const deleteUserAccount = async (req, res, next) => {
   try {
     const userId = req.user.id;
+
     const deletedUser = await User.findByIdAndDelete(userId);
 
     if (!deletedUser) {

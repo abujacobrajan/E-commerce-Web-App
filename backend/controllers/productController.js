@@ -6,8 +6,6 @@ import { handleImageUpload } from '../utils/imageUpload.js';
 const createProduct = async (req, res, next) => {
   try {
     const user = req.user;
-    // console.log('user in product', user);
-    // console.log('Creating product. User:', req.user);
 
     const {
       name,

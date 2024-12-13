@@ -25,6 +25,7 @@ const ProfilePage = () => {
 
   const [profilePicPreview, setProfilePicPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -126,6 +127,17 @@ const ProfilePage = () => {
       navigate('/');
     } catch (error) {
       toast.error('Failed to logout.');
+      console.error(error);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await axiosInstance.delete('/user/delete');
+      toast.success('Account deleted successfully!');
+      navigate('/');
+    } catch (error) {
+      toast.error('Failed to delete account.');
       console.error(error);
     }
   };
@@ -316,8 +328,58 @@ const ProfilePage = () => {
                 <button className="btn btn-danger ms-3" onClick={handleLogout}>
                   Logout
                 </button>
+                <button
+                  className="btn btn-danger ms-3"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  Delete Account
+                </button>
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`modal fade ${showDeleteModal ? 'show' : ''}`}
+        tabIndex="-1"
+        style={{ display: showDeleteModal ? 'block' : 'none' }}
+        aria-hidden={!showDeleteModal}
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirm Deletion</h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                onClick={() => setShowDeleteModal(false)}
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>
+                Are you sure you want to delete your account? This action cannot
+                be undone.
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleDeleteAccount}
+              >
+                Delete Account
+              </button>
+            </div>
           </div>
         </div>
       </div>

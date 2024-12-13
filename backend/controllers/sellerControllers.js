@@ -80,7 +80,9 @@ const sellerLogin = async (req, res, next) => {
     });
     return res.status(200).json({
       success: true,
-      message: 'Seller login successful.',
+      message: 'Login successful.',
+      sellerId: sellerExist._id,
+      role: sellerExist.role,
     });
   } catch (error) {
     console.log(error);
