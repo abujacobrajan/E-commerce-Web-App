@@ -167,7 +167,63 @@ const SellerProfilePage = () => {
           <div className="card p-4 shadow-sm">
             <h2>{isEditing ? 'Edit Profile' : 'Profile'}</h2>
 
-            {isEditing ? (
+            {!isEditing ? (
+              <div>
+                <img
+                  src={profilePicPreview || '/default-profile-pic.jpg'}
+                  alt="Profile"
+                  className="mb-3"
+                  style={{
+                    width: '150px',
+                    height: '150px',
+                    objectFit: 'cover',
+                  }}
+                />
+                <p>
+                  <strong>Business Name:</strong> {formData.businessName}
+                </p>
+                <p>
+                  <strong>Name:</strong> {formData.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {formData.email}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {formData.phone}
+                </p>
+                <p>
+                  <strong>Address:</strong> {renderAddress()}
+                </p>
+                <p>
+                  <strong>Status:</strong> {formData.status}
+                </p>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit Profile
+                </button>
+                <button className="btn btn-danger ms-3" onClick={handleLogout}>
+                  Logout
+                </button>
+                <button
+                  className="btn btn-danger ms-3"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  Delete Account
+                </button>
+
+                {/* Conditionally render the Admin Dashboard button */}
+                {formData.role === 'admin' && (
+                  <button
+                    className="btn btn-warning ms-3"
+                    onClick={() => navigate('/admin')}
+                  >
+                    Admin Dashboard
+                  </button>
+                )}
+              </div>
+            ) : (
               <form onSubmit={handleSubmit}>
                 <div className="mb-3 d-flex align-items-center">
                   <div className="me-3">
@@ -309,57 +365,12 @@ const SellerProfilePage = () => {
                   Cancel
                 </button>
               </form>
-            ) : (
-              <div>
-                <img
-                  src={profilePicPreview || '/default-profile-pic.jpg'}
-                  alt="Profile"
-                  className="mb-3"
-                  style={{
-                    width: '150px',
-                    height: '150px',
-                    objectFit: 'cover',
-                  }}
-                />
-                <p>
-                  <strong>Business Name:</strong> {formData.businessName}
-                </p>
-                <p>
-                  <strong>Name:</strong> {formData.name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {formData.email}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {formData.phone}
-                </p>
-                <p>
-                  <strong>Address:</strong> {renderAddress()}
-                </p>
-                <p>
-                  <strong>Status:</strong> {formData.status}
-                </p>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit Profile
-                </button>
-                <button className="btn btn-danger ms-3" onClick={handleLogout}>
-                  Logout
-                </button>
-                <button
-                  className="btn btn-danger ms-3"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  Delete Account
-                </button>
-              </div>
             )}
           </div>
         </div>
       </div>
 
+      {/* Modal for Account Deletion */}
       <div
         className={`modal fade ${isModalOpen ? 'show' : ''}`}
         tabIndex="-1"
@@ -382,16 +393,19 @@ const SellerProfilePage = () => {
               />
             </div>
             <div className="modal-body">
-              Are you sure you want to delete your account? This action cannot
-              be undone.
+              <p>
+                Are you sure you want to delete your account? This action cannot
+                be undone.
+              </p>
             </div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary"
+                data-bs-dismiss="modal"
                 onClick={() => setIsModalOpen(false)}
               >
-                Cancel
+                Close
               </button>
               <button
                 type="button"

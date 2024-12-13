@@ -19,7 +19,6 @@ const SellerLoginPage = () => {
         data,
       });
       const role = response.data.role;
-      console.log('======main project role', role);
       if (role === 'admin') {
         navigate('/admin');
       } else {
