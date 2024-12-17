@@ -217,6 +217,7 @@ const viewSellerList = async (req, res, next) => {
 };
 const checkSeller = async (req, res, next) => {
   try {
+    const { user } = req;
     if (!req.user) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -225,6 +226,28 @@ const checkSeller = async (req, res, next) => {
       success: true,
       message: 'Seller is authenticated',
       sellerId: req.user.id,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const deleteSellerByAdmin = async (req, res, next) => {
+  try {
+    const sellerId = req.params.sellerId;
+
+    const deletedSeller = await Seller.findByIdAndDelete(sellerId);
+
+    if (!deletedSeller) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'User not found.' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User account deleted successfully.',
     });
   } catch (error) {
     console.log(error);
@@ -241,4 +264,5 @@ export {
   deleteSellerAccount,
   viewSellerList,
   checkSeller,
+  deleteSellerByAdmin,
 };

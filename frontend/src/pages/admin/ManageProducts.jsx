@@ -26,6 +26,20 @@ const ManageProducts = () => {
     }
   };
 
+  const handleDeleteProduct = async (id) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      try {
+        const response = await axiosInstance.delete(`/products/delete/${id}`);
+        if (response.data.success) {
+          alert('Product deleted successfully.');
+          fetchProducts();
+        }
+      } catch (error) {
+        console.error('Error deleting product:', error);
+      }
+    }
+  };
+
   return (
     <div className="container mt-5">
       <button className="btn btn-info mb-3" onClick={() => navigate('/admin')}>
@@ -40,6 +54,7 @@ const ManageProducts = () => {
             <th>ID</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -49,6 +64,14 @@ const ManageProducts = () => {
                 <td>{product._id}</td>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDeleteProduct(product._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (

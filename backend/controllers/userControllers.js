@@ -231,6 +231,28 @@ const viewUserList = async (req, res, next) => {
   }
 };
 
+const deleteUserByAdmin = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'User not found.' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User account deleted successfully.',
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export {
   userSignup,
   userLogin,
@@ -240,4 +262,5 @@ export {
   updateUserProfile,
   deleteUserAccount,
   viewUserList,
+  deleteUserByAdmin,
 };

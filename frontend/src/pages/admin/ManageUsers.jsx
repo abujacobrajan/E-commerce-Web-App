@@ -25,6 +25,22 @@ const ManageUsers = () => {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      try {
+        const response = await axiosInstance.delete(
+          `/user/delete-user-by-admin/${userId}`
+        );
+        if (response.data.success) {
+          alert('User deleted successfully.');
+          fetchUsers();
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
+    }
+  };
+
   return (
     <div className="container mt-5">
       <button className="btn btn-info mb-3" onClick={() => navigate('/admin')}>
@@ -38,6 +54,7 @@ const ManageUsers = () => {
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +64,14 @@ const ManageUsers = () => {
                 <td>{user._id}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDeleteUser(user._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (

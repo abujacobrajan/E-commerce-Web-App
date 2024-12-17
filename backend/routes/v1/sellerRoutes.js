@@ -8,9 +8,11 @@ import {
   deleteSellerAccount,
   viewSellerList,
   checkSeller,
+  deleteSellerByAdmin,
 } from '../../controllers/sellerControllers.js';
 import { sellerAuth } from '../../middlewares/sellerAuth.js';
 import { upload } from '../../middlewares/multer.js';
+import { adminAuth } from '../../middlewares/adminAuth.js';
 
 const router = express.Router();
 
@@ -28,5 +30,10 @@ router.put(
 router.delete('/delete', sellerAuth, deleteSellerAccount);
 router.get('/list', sellerAuth, viewSellerList);
 router.get('/check-seller', sellerAuth, checkSeller);
+router.delete(
+  '/delete-seller-by-admin/:sellerId',
+  adminAuth,
+  deleteSellerByAdmin
+);
 
 export { router as sellerRoutes };

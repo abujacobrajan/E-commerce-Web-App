@@ -18,6 +18,7 @@ const AuthAdmin = ({ children }) => {
     } catch (error) {
       setIsAdmin(false);
       console.error(error);
+      navigate('/seller-login');
     }
   };
 

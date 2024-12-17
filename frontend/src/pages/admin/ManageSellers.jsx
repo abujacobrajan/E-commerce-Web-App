@@ -25,6 +25,22 @@ const ManageSellers = () => {
     }
   };
 
+  const handleDeleteSeller = async (sellerId) => {
+    if (window.confirm('Are you sure you want to delete this seller?')) {
+      try {
+        const response = await axiosInstance.delete(
+          `/seller/delete-seller-by-admin/${sellerId}`
+        );
+        if (response.data.success) {
+          alert('Seller deleted successfully.');
+          fetchSellers();
+        }
+      } catch (error) {
+        console.error('Error deleting seller:', error);
+      }
+    }
+  };
+
   return (
     <div className="container mt-5">
       <button className="btn btn-info mb-3" onClick={() => navigate('/admin')}>
@@ -38,6 +54,7 @@ const ManageSellers = () => {
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +64,14 @@ const ManageSellers = () => {
                 <td>{seller._id}</td>
                 <td>{seller.name}</td>
                 <td>{seller.email}</td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDeleteSeller(seller._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
