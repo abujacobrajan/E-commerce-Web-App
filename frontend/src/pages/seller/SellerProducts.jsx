@@ -92,7 +92,14 @@ const SellerProducts = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <h3>Your Products</h3>
       <div className="container">
         <div className="row">
@@ -107,88 +114,117 @@ const SellerProducts = () => {
                 className={`border border-info rounded shadow p-3 bg-body`}
                 style={{ width: '100%' }}
               >
-                <div className="image-container">
+                <div className="image-container text-center">
                   <img
-                    src={product.image}
+                    src={
+                      editProductId === product._id && image
+                        ? URL.createObjectURL(image)
+                        : product.image
+                    }
                     alt={product.name}
                     style={{
-                      width: editProductId === product._id ? '50%' : '100%',
-                      height: '200px',
+                      width: editProductId === product._id ? '20%' : '100%',
+                      height: '150px',
                       objectFit: 'cover',
                     }}
                   />
+                  {editProductId === product._id && (
+                    <div className="mt-2">
+                      <input
+                        type="file"
+                        onChange={handleImageChange}
+                        className="form-control"
+                      />
+                    </div>
+                  )}
                 </div>
                 {editProductId === product._id ? (
-                  <div className="row">
+                  <div className="row mt-3">
                     <div className="col-12">
-                      <div className="d-flex justify-content-between mb-2">
-                        <label>Product Name:</label>
-                        <input
-                          type="text"
-                          name="name"
-                          value={editedProduct.name}
-                          onChange={handleInputChange}
-                          className="form-control"
-                        />
+                      <div className="row mb-2">
+                        <label className="col-sm-3 col-form-label">
+                          Product Name:
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            name="name"
+                            value={editedProduct.name}
+                            onChange={handleInputChange}
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-between mb-2">
-                        <label>Brand:</label>
-                        <input
-                          type="text"
-                          name="brand"
-                          value={editedProduct.brand}
-                          onChange={handleInputChange}
-                          className="form-control"
-                        />
+                      <div className="row mb-2">
+                        <label className="col-sm-3 col-form-label">
+                          Brand:
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            name="brand"
+                            value={editedProduct.brand}
+                            onChange={handleInputChange}
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-between mb-2">
-                        <label>Price:</label>
-                        <input
-                          type="text"
-                          name="price"
-                          value={editedProduct.price}
-                          onChange={handleInputChange}
-                          className="form-control"
-                        />
+                      <div className="row mb-2">
+                        <label className="col-sm-3 col-form-label">
+                          Price:
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            name="price"
+                            value={editedProduct.price}
+                            onChange={handleInputChange}
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-between mb-2">
-                        <label>Category:</label>
-                        <input
-                          type="text"
-                          name="category"
-                          value={editedProduct.category}
-                          onChange={handleInputChange}
-                          className="form-control"
-                        />
+                      <div className="row mb-2">
+                        <label className="col-sm-3 col-form-label">
+                          Category:
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            name="category"
+                            value={editedProduct.category}
+                            onChange={handleInputChange}
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-between mb-2">
-                        <label>Count In Stock:</label>
-                        <input
-                          type="number"
-                          name="countInStock"
-                          value={editedProduct.countInStock}
-                          onChange={handleInputChange}
-                          className="form-control"
-                        />
+                      <div className="row mb-2">
+                        <label className="col-sm-3 col-form-label">
+                          Count In Stock:
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="number"
+                            name="countInStock"
+                            value={editedProduct.countInStock}
+                            onChange={handleInputChange}
+                            className="form-control"
+                          />
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-between mb-2">
-                        <label>Description:</label>
-                        <textarea
-                          name="description"
-                          value={editedProduct.description}
-                          onChange={handleInputChange}
-                          className="form-control"
-                        ></textarea>
+                      <div className="row mb-2">
+                        <label className="col-sm-3 col-form-label">
+                          Description:
+                        </label>
+                        <div className="col-sm-9">
+                          <textarea
+                            name="description"
+                            value={editedProduct.description}
+                            onChange={handleInputChange}
+                            className="form-control"
+                          ></textarea>
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-between mb-2">
-                        <label>Image:</label>
-                        <input
-                          type="file"
-                          onChange={handleImageChange}
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="d-flex justify-content-between mb-2">
+                      <div className="d-flex justify-content-end">
                         <button
                           type="button"
                           className="btn btn-outline-success me-2"

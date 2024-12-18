@@ -48,7 +48,19 @@ const WishListPage = () => {
   }
 
   if (wishlist.length === 0) {
-    return <div>Your wishlist is empty.</div>;
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          textAlign: 'center',
+        }}
+      >
+        <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+          Your wishlist is empty
+        </p>
+      </div>
+    );
   }
 
   return (

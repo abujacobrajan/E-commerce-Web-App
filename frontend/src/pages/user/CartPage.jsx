@@ -113,12 +113,24 @@ const CartPage = () => {
   }
 
   if (!cartItems || cartItems.products.length === 0) {
-    return <p>Your cart is empty.</p>;
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          textAlign: 'center',
+        }}
+      >
+        <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+          Your cart is empty
+        </p>
+      </div>
+    );
   }
 
   return (
     <div style={{ minHeight: '100vh' }}>
-      <h3>This is your shopping cart.</h3>
+      <h3>Your shopping cart</h3>
       <div>
         <ul style={{ listStyleType: 'none', padding: 0 }} className="m-2">
           {cartItems.products.map((item) => (

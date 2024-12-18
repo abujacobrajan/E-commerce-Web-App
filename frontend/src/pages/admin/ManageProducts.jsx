@@ -41,7 +41,7 @@ const ManageProducts = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5" style={{ minHeight: '100vh' }}>
       <button className="btn btn-info mb-3" onClick={() => navigate('/admin')}>
         Back to Admins Page
       </button>

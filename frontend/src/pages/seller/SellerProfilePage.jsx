@@ -213,7 +213,6 @@ const SellerProfilePage = () => {
                   Delete Account
                 </button>
 
-                {/* Conditionally render the Admin Dashboard button */}
                 {formData.role === 'admin' && (
                   <button
                     className="btn btn-warning ms-3"
@@ -370,7 +369,6 @@ const SellerProfilePage = () => {
         </div>
       </div>
 
-      {/* Modal for Account Deletion */}
       <div
         className={`modal fade ${isModalOpen ? 'show' : ''}`}
         tabIndex="-1"
