@@ -16,9 +16,16 @@ const ManageSellers = () => {
       const response = await axiosInstance.get('/seller/list');
       console.log('API response:', response.data);
       if (Array.isArray(response.data)) {
-        setSellers(response.data);
+        // Filter out admins before setting the state
+        const filteredSellers = response.data.filter(
+          (user) => user.role !== 'admin'
+        );
+        setSellers(filteredSellers);
       } else if (response.data.sellers) {
-        setSellers(response.data.sellers);
+        const filteredSellers = response.data.sellers.filter(
+          (user) => user.role !== 'admin'
+        );
+        setSellers(filteredSellers);
       }
     } catch (error) {
       console.error('Error fetching sellers:', error);
