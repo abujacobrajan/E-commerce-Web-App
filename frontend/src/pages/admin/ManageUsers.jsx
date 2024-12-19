@@ -27,16 +27,23 @@ const ManageUsers = () => {
 
   const handleDeleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+
       try {
         const response = await axiosInstance.delete(
           `/user/delete-user-by-admin/${userId}`
         );
+
         if (response.data.success) {
           alert('User deleted successfully.');
+        } else {
           fetchUsers();
+          alert('Failed to delete the user. Please try again.');
         }
       } catch (error) {
         console.error('Error deleting user:', error);
+        fetchUsers();
+        alert('An error occurred while deleting the user.');
       }
     }
   };

@@ -16,7 +16,6 @@ const ManageSellers = () => {
       const response = await axiosInstance.get('/seller/list');
       console.log('API response:', response.data);
       if (Array.isArray(response.data)) {
-        // Filter out admins before setting the state
         const filteredSellers = response.data.filter(
           (user) => user.role !== 'admin'
         );
@@ -34,16 +33,24 @@ const ManageSellers = () => {
 
   const handleDeleteSeller = async (sellerId) => {
     if (window.confirm('Are you sure you want to delete this seller?')) {
+      setSellers((prevSellers) =>
+        prevSellers.filter((seller) => seller._id !== sellerId)
+      );
+
       try {
         const response = await axiosInstance.delete(
           `/seller/delete-seller-by-admin/${sellerId}`
         );
         if (response.data.success) {
           alert('Seller deleted successfully.');
+        } else {
           fetchSellers();
+          alert('Failed to delete the seller. Please try again.');
         }
       } catch (error) {
         console.error('Error deleting seller:', error);
+        fetchSellers();
+        alert('An error occurred while deleting the seller.');
       }
     }
   };

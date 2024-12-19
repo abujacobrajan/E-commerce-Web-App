@@ -28,14 +28,23 @@ const ManageProducts = () => {
 
   const handleDeleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== id)
+      );
+
       try {
         const response = await axiosInstance.delete(`/products/delete/${id}`);
         if (response.data.success) {
           alert('Product deleted successfully.');
+        } else {
           fetchProducts();
+          alert('Failed to delete the product. Please try again.');
         }
       } catch (error) {
         console.error('Error deleting product:', error);
+
+        fetchProducts();
+        alert('An error occurred while deleting the product.');
       }
     }
   };
