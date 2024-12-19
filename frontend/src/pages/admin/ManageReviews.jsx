@@ -72,8 +72,10 @@ const ManageReviews = () => {
             reviews.map((review) => (
               <tr key={review._id}>
                 <td>{review._id}</td>
-                <td>{review.product.name}</td>
-                <td>{review.user.name}</td>
+                <td>
+                  {review.product ? review.product.name : 'Unknown Product'}
+                </td>
+                <td>{review.user ? review.user.name : 'Unknown User'}</td>
                 <td>{review.rating}</td>
                 <td>{review.comment}</td>
                 <td>
