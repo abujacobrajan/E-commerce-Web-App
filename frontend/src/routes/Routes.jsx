@@ -22,6 +22,7 @@ import AdminLayout from '../layout/AdminLayout.jsx';
 import AuthAdmin from './protectedRoutes/AuthAdmin.jsx';
 import ManageUsers from '../pages/admin/ManageUsers.jsx';
 import ManageSellers from '../pages/admin/ManageSellers.jsx';
+import ManageReviews from '../pages/admin/ManageReviews.jsx';
 import ManageProducts from '../pages/admin/ManageProducts.jsx';
 import SuccessPage from '../pages/user/SuccessPage.jsx';
 import CancelPage from '../pages/user/CancelPage.jsx';
@@ -92,6 +93,7 @@ export const router = createBrowserRouter([
       { path: 'manage-users', element: <ManageUsers /> },
       { path: 'manage-sellers', element: <ManageSellers /> },
       { path: 'manage-products', element: <ManageProducts /> },
+      { path: 'manage-reviews', element: <ManageReviews /> },
     ],
   },
 ]);

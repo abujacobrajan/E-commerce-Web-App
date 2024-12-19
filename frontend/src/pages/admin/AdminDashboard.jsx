@@ -16,6 +16,9 @@ const AdminDashboard = () => {
         <Link to="manage-products" className="btn btn-primary m-2">
           View All Products
         </Link>
+        <Link to="manage-reviews" className="btn btn-primary m-2">
+          View All Reviews
+        </Link>
       </div>
     </div>
   );

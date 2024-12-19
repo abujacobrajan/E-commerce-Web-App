@@ -148,10 +148,33 @@ const getAverageRating = async (req, res) => {
   }
 };
 
+const getAllReviews = async (req, res, next) => {
+  try {
+    const reviews = await Review.find()
+      .populate('user', 'name')
+      .populate('product', 'name');
+
+    if (!reviews.length) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'No reviews found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: reviews,
+    });
+  } catch (error) {
+    console.error('Error in getAllReviews:', error);
+    next(error);
+  }
+};
+
 export {
   addReview,
   getReviewsByProduct,
   updateReview,
   deleteReview,
   getAverageRating,
+  getAllReviews,
 };

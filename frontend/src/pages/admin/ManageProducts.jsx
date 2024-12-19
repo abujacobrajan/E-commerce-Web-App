@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
+  const [deletingProductId, setDeletingProductId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,8 +15,6 @@ const ManageProducts = () => {
   const fetchProducts = async () => {
     try {
       const response = await axiosInstance.get('/products/productlists');
-      console.log('API response:', response.data);
-
       if (response.data.success && Array.isArray(response.data.data)) {
         setProducts(response.data.data);
       } else {
@@ -28,6 +27,7 @@ const ManageProducts = () => {
 
   const handleDeleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
+      setDeletingProductId(id);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product._id !== id)
       );
@@ -42,9 +42,10 @@ const ManageProducts = () => {
         }
       } catch (error) {
         console.error('Error deleting product:', error);
-
         fetchProducts();
         alert('An error occurred while deleting the product.');
+      } finally {
+        setDeletingProductId(null);
       }
     }
   };
@@ -52,7 +53,7 @@ const ManageProducts = () => {
   return (
     <div className="container mt-5" style={{ minHeight: '100vh' }}>
       <button className="btn btn-info mb-3" onClick={() => navigate('/admin')}>
-        Back to Admins Page
+        Back to Admin Page
       </button>
 
       <h2>All Products</h2>
@@ -77,8 +78,11 @@ const ManageProducts = () => {
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => handleDeleteProduct(product._id)}
+                    disabled={deletingProductId === product._id}
                   >
-                    Delete
+                    {deletingProductId === product._id
+                      ? 'Deleting...'
+                      : 'Delete'}
                   </button>
                 </td>
               </tr>

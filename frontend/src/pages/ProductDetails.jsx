@@ -8,6 +8,8 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAddReviewForm, setShowAddReviewForm] = useState(false);
+  const [newReview, setNewReview] = useState({ rating: '', comment: '' });
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -30,27 +32,39 @@ const ProductDetails = () => {
 
   const addToCart = async () => {
     try {
-      const response = await axiosInstance({
-        url: '/cart/add-to-cart',
-        method: 'POST',
-        data: { productId: product._id },
-      });
+      await axiosInstance.post('/cart/add-to-cart', { productId: product._id });
       toast.success('Product added to cart');
     } catch (error) {
-      toast.error('Product could not add to cart');
+      toast.error('Product could not be added to cart');
     }
   };
 
   const addToWishlist = async () => {
     try {
-      const response = await axiosInstance({
-        url: '/wishlist/add',
-        method: 'POST',
-        data: { productId: product._id },
-      });
+      await axiosInstance.post('/wishlist/add', { productId: product._id });
       toast.success('Product added to wishlist');
     } catch (error) {
       toast.error('Failed to add product to wishlist');
+    }
+  };
+
+  const handleAddReview = async () => {
+    try {
+      const { rating, comment } = newReview;
+      await axiosInstance.post('/reviews/add', {
+        productId: product._id,
+        rating,
+        comment,
+      });
+      toast.success('Review added successfully');
+      setNewReview({ rating: '', comment: '' });
+      setShowAddReviewForm(false);
+
+      const updatedProduct = await axiosInstance.get(`/products/${productId}`);
+      setProduct(updatedProduct.data.data);
+    } catch (error) {
+      console.error('Error adding review:', error);
+      toast.error('Failed to add review');
     }
   };
 
@@ -98,6 +112,14 @@ const ProductDetails = () => {
           <button onClick={addToWishlist} className="btn btn-warning">
             Add to wishlist
           </button>
+          <p></p>
+          <button
+            className="btn btn-primary mt-2"
+            onClick={() => setShowAddReviewForm(true)}
+          >
+            Add Review
+          </button>
+
           <p>
             <strong>Reviews:</strong> {product?.numReviews}
           </p>
@@ -120,6 +142,50 @@ const ProductDetails = () => {
               <p>No reviews available</p>
             )}
           </ul>
+
+          {showAddReviewForm && (
+            <div className="mt-3 p-3 border rounded">
+              <h3>Add Your Review</h3>
+              <div className="mb-3">
+                <label htmlFor="rating" className="form-label">
+                  Rating (1-5)
+                </label>
+                <input
+                  type="number"
+                  id="rating"
+                  className="form-control"
+                  value={newReview.rating}
+                  onChange={(e) =>
+                    setNewReview({ ...newReview, rating: e.target.value })
+                  }
+                  min="1"
+                  max="5"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="comment" className="form-label">
+                  Comment
+                </label>
+                <textarea
+                  id="comment"
+                  className="form-control"
+                  value={newReview.comment}
+                  onChange={(e) =>
+                    setNewReview({ ...newReview, comment: e.target.value })
+                  }
+                ></textarea>
+              </div>
+              <button className="btn btn-success" onClick={handleAddReview}>
+                Submit Review
+              </button>
+              <button
+                className="btn btn-secondary ms-2"
+                onClick={() => setShowAddReviewForm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div>Product not found</div>

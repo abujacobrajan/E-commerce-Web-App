@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ManageSellers = () => {
   const [sellers, setSellers] = useState([]);
+  const [deletingSellerId, setDeletingSellerId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +15,6 @@ const ManageSellers = () => {
   const fetchSellers = async () => {
     try {
       const response = await axiosInstance.get('/seller/list');
-      console.log('API response:', response.data);
       if (Array.isArray(response.data)) {
         const filteredSellers = response.data.filter(
           (user) => user.role !== 'admin'
@@ -33,6 +33,7 @@ const ManageSellers = () => {
 
   const handleDeleteSeller = async (sellerId) => {
     if (window.confirm('Are you sure you want to delete this seller?')) {
+      setDeletingSellerId(sellerId);
       setSellers((prevSellers) =>
         prevSellers.filter((seller) => seller._id !== sellerId)
       );
@@ -51,6 +52,8 @@ const ManageSellers = () => {
         console.error('Error deleting seller:', error);
         fetchSellers();
         alert('An error occurred while deleting the seller.');
+      } finally {
+        setDeletingSellerId(null);
       }
     }
   };
@@ -58,7 +61,7 @@ const ManageSellers = () => {
   return (
     <div className="container mt-5" style={{ minHeight: '100vh' }}>
       <button className="btn btn-info mb-3" onClick={() => navigate('/admin')}>
-        Back to Admins Page
+        Back to Admin Page
       </button>
 
       <h2>All Sellers</h2>
@@ -82,8 +85,9 @@ const ManageSellers = () => {
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => handleDeleteSeller(seller._id)}
+                    disabled={deletingSellerId === seller._id}
                   >
-                    Delete
+                    {deletingSellerId === seller._id ? 'Deleting...' : 'Delete'}
                   </button>
                 </td>
               </tr>
