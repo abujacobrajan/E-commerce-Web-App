@@ -69,123 +69,131 @@ const ProductDetails = () => {
   };
 
   return (
-    <div>
+    <div className="container mt-4">
       {product ? (
-        <div className="p-2">
-          <h1>{product?.name}</h1>
-          <img
-            src={product?.image}
-            alt={product?.name}
-            style={{ width: '300px', height: '300px' }}
-          />
-          <p>
-            <strong>Price:</strong> Rs.{product?.price}
-          </p>
-          <p>
-            <strong>Brand:</strong> {product?.brand}
-          </p>
-          <p>
-            <strong>Description:</strong> {product?.description}
-          </p>
-          <p>
-            <strong>In Stock:</strong> {product?.countInStock}
-          </p>
-          <p>
-            <strong>Rating:</strong>{' '}
-            {product?.reviews && product.reviews.length > 0
-              ? (
-                  product.reviews.reduce(
-                    (sum, review) => sum + review.rating,
-                    0
-                  ) / product.reviews.length
-                ).toFixed(1)
-              : 'No ratings yet'}
-          </p>
+        <div className="row">
+          {/* Left Section: Image */}
+          <div className="col-md-4">
+            <img
+              src={product?.image}
+              alt={product?.name}
+              className="img-fluid rounded shadow"
+            />
+          </div>
 
-          <p>
-            <strong>Seller:</strong> {product?.seller?.name || 'Unknown Seller'}
-          </p>
-          <button onClick={addToCart} className="btn btn-warning">
-            Add to cart
-          </button>
-          <p></p>
-          <button onClick={addToWishlist} className="btn btn-warning">
-            Add to wishlist
-          </button>
-          <p></p>
-          <button
-            className="btn btn-primary mt-2"
-            onClick={() => setShowAddReviewForm(true)}
-          >
-            Add Review
-          </button>
+          {/* Right Section: Product Details and Reviews */}
+          <div className="col-md-8">
+            <h1>{product?.name}</h1>
+            <p>
+              <strong>Price:</strong> Rs.{product?.price}
+            </p>
+            <p>
+              <strong>Brand:</strong> {product?.brand}
+            </p>
+            <p>
+              <strong>Description:</strong> {product?.description}
+            </p>
+            <p>
+              <strong>In Stock:</strong> {product?.countInStock}
+            </p>
+            <p>
+              <strong>Rating:</strong>{' '}
+              {product?.reviews && product.reviews.length > 0
+                ? (
+                    product.reviews.reduce(
+                      (sum, review) => sum + review.rating,
+                      0
+                    ) / product.reviews.length
+                  ).toFixed(1)
+                : 'No ratings yet'}
+            </p>
+            <p>
+              <strong>Seller:</strong>{' '}
+              {product?.seller?.name || 'Unknown Seller'}
+            </p>
+            <button onClick={addToCart} className="btn btn-warning me-2">
+              Add to cart
+            </button>
+            <button onClick={addToWishlist} className="btn btn-warning">
+              Add to wishlist
+            </button>
+            <button
+              className="btn btn-primary mt-3 d-block"
+              onClick={() => setShowAddReviewForm(true)}
+            >
+              Add Review
+            </button>
 
-          <p>
-            <strong>Reviews:</strong> {product?.numReviews}
-          </p>
-          <ul>
-            {product?.reviews && product.reviews.length > 0 ? (
-              product.reviews.map((review) => (
-                <li key={review._id} className="border rounded p-2 mb-2">
-                  <p>
-                    <strong>User:</strong> {review?.user?.name || 'Anonymous'}
-                  </p>
-                  <p>
-                    <strong>Comment:</strong> {review.comment}
-                  </p>
-                  <p>
-                    <strong>Rating:</strong> {review.rating} / 5
-                  </p>
-                </li>
-              ))
-            ) : (
-              <p>No reviews available</p>
-            )}
-          </ul>
+            {/* Reviews Section */}
+            <div className="mt-4">
+              <h3>Reviews</h3>
+              <ul className="list-unstyled">
+                {product?.reviews && product.reviews.length > 0 ? (
+                  product.reviews.map((review) => (
+                    <li key={review._id} className="border rounded p-2 mb-2">
+                      <p>
+                        <strong>User:</strong>{' '}
+                        {review?.user?.name || 'Anonymous'}
+                      </p>
+                      <p>
+                        <strong>Comment:</strong> {review.comment}
+                      </p>
+                      <p>
+                        <strong>Rating:</strong> {review.rating} / 5
+                      </p>
+                    </li>
+                  ))
+                ) : (
+                  <p>No reviews available</p>
+                )}
+              </ul>
 
-          {showAddReviewForm && (
-            <div className="mt-3 p-3 border rounded">
-              <h3>Add Your Review</h3>
-              <div className="mb-3">
-                <label htmlFor="rating" className="form-label">
-                  Rating (1-5)
-                </label>
-                <input
-                  type="number"
-                  id="rating"
-                  className="form-control"
-                  value={newReview.rating}
-                  onChange={(e) =>
-                    setNewReview({ ...newReview, rating: e.target.value })
-                  }
-                  min="1"
-                  max="5"
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="comment" className="form-label">
-                  Comment
-                </label>
-                <textarea
-                  id="comment"
-                  className="form-control"
-                  value={newReview.comment}
-                  onChange={(e) =>
-                    setNewReview({ ...newReview, comment: e.target.value })
-                  }
-                ></textarea>
-              </div>
-              <button className="btn btn-success" onClick={handleAddReview}>
-                Submit Review
-              </button>
-              <button
-                className="btn btn-secondary ms-2"
-                onClick={() => setShowAddReviewForm(false)}
-              >
-                Cancel
-              </button>
+              {/* Add Review Form */}
+              {showAddReviewForm && (
+                <div className="mt-3 p-3 border rounded">
+                  <h3>Add Your Review</h3>
+                  <div className="mb-3">
+                    <label htmlFor="rating" className="form-label">
+                      Rating (1-5)
+                    </label>
+                    <input
+                      type="number"
+                      id="rating"
+                      className="form-control"
+                      value={newReview.rating}
+                      onChange={(e) =>
+                        setNewReview({ ...newReview, rating: e.target.value })
+                      }
+                      min="1"
+                      max="5"
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="comment" className="form-label">
+                      Comment
+                    </label>
+                    <textarea
+                      id="comment"
+                      className="form-control"
+                      value={newReview.comment}
+                      onChange={(e) =>
+                        setNewReview({ ...newReview, comment: e.target.value })
+                      }
+                    ></textarea>
+                  </div>
+                  <button className="btn btn-success" onClick={handleAddReview}>
+                    Submit Review
+                  </button>
+                  <button
+                    className="btn btn-secondary ms-2"
+                    onClick={() => setShowAddReviewForm(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       ) : (
         <div>Product not found</div>
