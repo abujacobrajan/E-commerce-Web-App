@@ -72,7 +72,6 @@ const ProductDetails = () => {
     <div className="container mt-4">
       {product ? (
         <div className="row">
-          {/* Left Section: Image */}
           <div className="col-md-4">
             <img
               src={product?.image}
@@ -81,7 +80,6 @@ const ProductDetails = () => {
             />
           </div>
 
-          {/* Right Section: Product Details and Reviews */}
           <div className="col-md-8">
             <h1>{product?.name}</h1>
             <p>
@@ -124,7 +122,6 @@ const ProductDetails = () => {
               Add Review
             </button>
 
-            {/* Reviews Section */}
             <div className="mt-4">
               <h3>Reviews</h3>
               <ul className="list-unstyled">
@@ -148,7 +145,6 @@ const ProductDetails = () => {
                 )}
               </ul>
 
-              {/* Add Review Form */}
               {showAddReviewForm && (
                 <div className="mt-3 p-3 border rounded">
                   <h3>Add Your Review</h3>
