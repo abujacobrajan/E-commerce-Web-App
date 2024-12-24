@@ -325,6 +325,13 @@ const ProfilePage = () => {
                 >
                   Edit Profile
                 </button>
+                <button
+                  className="btn btn-secondary ms-3"
+                  onClick={() => navigate('/user/orders')}
+                >
+                  Your Orders
+                </button>
+
                 <button className="btn btn-danger ms-3" onClick={handleLogout}>
                   Logout
                 </button>

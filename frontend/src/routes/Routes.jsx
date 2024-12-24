@@ -26,6 +26,7 @@ import ManageReviews from '../pages/admin/ManageReviews.jsx';
 import ManageProducts from '../pages/admin/ManageProducts.jsx';
 import SuccessPage from '../pages/user/SuccessPage.jsx';
 import CancelPage from '../pages/user/CancelPage.jsx';
+import OrdersPage from '../pages/user/OrdersPage.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       { path: 'profile', element: <ProfilePage /> },
+      { path: 'orders', element: <OrdersPage /> },
       { path: 'cart', element: <CartPage /> },
       { path: 'wishlist', element: <WishListPage /> },
       { path: '', element: <Home /> },

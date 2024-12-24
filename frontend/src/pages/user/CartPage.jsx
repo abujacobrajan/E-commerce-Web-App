@@ -30,6 +30,7 @@ const CartPage = () => {
       );
 
       const formattedProducts = cartItems.products.map((item) => ({
+        productId: item.productId._id,
         name: item.productId.name,
         image: item.productId.image,
         price: item.productId.price,

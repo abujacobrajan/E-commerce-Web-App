@@ -10,6 +10,7 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [showAddReviewForm, setShowAddReviewForm] = useState(false);
   const [newReview, setNewReview] = useState({ rating: '', comment: '' });
+  const [hasPurchased, setHasPurchased] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -27,8 +28,20 @@ const ProductDetails = () => {
     fetchProduct();
   }, [productId]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  useEffect(() => {
+    const checkPurchaseStatus = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/payment/has-purchased/${productId}`
+        );
+        setHasPurchased(response.data.success && response.data.hasPurchased);
+      } catch (error) {
+        console.error('Error checking purchase status:', error);
+      }
+    };
+
+    checkPurchaseStatus();
+  }, [productId]);
 
   const addToCart = async () => {
     try {
@@ -67,6 +80,9 @@ const ProductDetails = () => {
       toast.error('Failed to add review');
     }
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="container mt-4">
@@ -115,12 +131,14 @@ const ProductDetails = () => {
             <button onClick={addToWishlist} className="btn btn-warning">
               Add to wishlist
             </button>
-            <button
-              className="btn btn-primary mt-3 d-block"
-              onClick={() => setShowAddReviewForm(true)}
-            >
-              Add Review
-            </button>
+            {hasPurchased && (
+              <button
+                className="btn btn-primary mt-3 d-block"
+                onClick={() => setShowAddReviewForm(true)}
+              >
+                Add Review
+              </button>
+            )}
 
             <div className="mt-4">
               <h3>Reviews</h3>
