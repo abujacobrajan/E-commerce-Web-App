@@ -10,12 +10,17 @@ const OrdersPage = () => {
     const fetchUserOrders = async () => {
       try {
         const response = await axiosInstance.get('/payment/orders');
-        setOrders(response?.data?.orders || []);
-        setLoading(false);
+        const fetchedOrders = response?.data?.orders || [];
+        setOrders(fetchedOrders);
       } catch (error) {
-        toast.error('Failed to fetch orders.');
+        if (error.response?.status === 404) {
+          setOrders([]);
+        } else {
+          toast.error('Failed to fetch orders.');
+          console.error(error);
+        }
+      } finally {
         setLoading(false);
-        console.error(error);
       }
     };
 

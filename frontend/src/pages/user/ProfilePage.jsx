@@ -326,7 +326,7 @@ const ProfilePage = () => {
                   Edit Profile
                 </button>
                 <button
-                  className="btn btn-secondary ms-3"
+                  className="btn btn-primary ms-3"
                   onClick={() => navigate('/user/orders')}
                 >
                   Your Orders
