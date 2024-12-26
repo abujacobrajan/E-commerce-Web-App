@@ -32,7 +32,7 @@ const OrdersPage = () => {
   }
 
   return (
-    <div className="container m-4 p-4">
+    <div className="container m-4 p-4" style={{ minHeight: '100vh' }}>
       <h2>Your Orders</h2>
       {orders.length === 0 ? (
         <p>You have no orders yet.</p>
