@@ -84,6 +84,8 @@ const ProductDetails = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
+  const isOutOfStock = product?.countInStock < 1 || !product?.seller;
+
   return (
     <div className="container mt-4">
       {product ? (
@@ -108,7 +110,12 @@ const ProductDetails = () => {
               <strong>Description:</strong> {product?.description}
             </p>
             <p>
-              <strong>In Stock:</strong> {product?.countInStock}
+              <strong>In Stock:</strong>{' '}
+              {isOutOfStock ? (
+                <span className="text-danger">Out of Stock</span>
+              ) : (
+                product?.countInStock
+              )}
             </p>
             <p>
               <strong>Rating:</strong>{' '}
@@ -123,12 +130,22 @@ const ProductDetails = () => {
             </p>
             <p>
               <strong>Seller:</strong>{' '}
-              {product?.seller?.name || 'Unknown Seller'}
+              {product?.seller?.name || (
+                <span className="text-danger">Unknown Seller</span>
+              )}
             </p>
-            <button onClick={addToCart} className="btn btn-warning me-2">
+            <button
+              onClick={addToCart}
+              className="btn btn-warning me-2"
+              disabled={isOutOfStock}
+            >
               Add to cart
             </button>
-            <button onClick={addToWishlist} className="btn btn-warning">
+            <button
+              onClick={addToWishlist}
+              className="btn btn-warning"
+              disabled={isOutOfStock}
+            >
               Add to wishlist
             </button>
             {hasPurchased && (

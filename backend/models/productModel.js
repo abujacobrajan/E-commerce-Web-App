@@ -5,7 +5,6 @@ const productSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     image: {
       type: String,
@@ -31,6 +30,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    unitsSold: { type: Number, default: 0 },
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,

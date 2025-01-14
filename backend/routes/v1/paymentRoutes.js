@@ -2,6 +2,7 @@ import express from 'express';
 import { userAuth } from '../../middlewares/userAuth.js';
 import Stripe from 'stripe';
 import { Order } from '../../models/orderModel.js';
+import { Product } from '../../models/productModel.js';
 import mongoose from 'mongoose';
 
 const router = express.Router();
@@ -16,23 +17,25 @@ router.post('/create-checkout-session', userAuth, async (req, res, next) => {
       return res.status(400).json({ message: 'No products provided' });
     }
 
-    const lineItems = products.map((product) => {
-      if (!product.name || !product.price || !product.quantity) {
-        throw new Error('Invalid product data');
-      }
-
-      return {
-        price_data: {
-          currency: 'inr',
-          product_data: {
-            name: product.name,
-            images: product.image ? [product.image] : [],
+    const lineItems = await Promise.all(
+      products.map(async (product) => {
+        const dbProduct = await Product.findById(product.productId);
+        if (!dbProduct || dbProduct.countInStock < product.quantity) {
+          throw new Error(`Product ${product.name} has insufficient stock.`);
+        }
+        return {
+          price_data: {
+            currency: 'inr',
+            product_data: {
+              name: dbProduct.name,
+              images: dbProduct.image ? [dbProduct.image] : [],
+            },
+            unit_amount: Math.round(dbProduct.price * 100),
           },
-          unit_amount: Math.round(product.price * 100),
-        },
-        quantity: product.quantity,
-      };
-    });
+          quantity: product.quantity,
+        };
+      })
+    );
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -47,8 +50,8 @@ router.post('/create-checkout-session', userAuth, async (req, res, next) => {
       sessionId: session.id,
       products: products.map((product) => ({
         productId: product.productId,
-        image: product.image,
         name: product.name,
+        image: product.image,
         quantity: product.quantity,
         price: product.price,
       })),
@@ -59,9 +62,10 @@ router.post('/create-checkout-session', userAuth, async (req, res, next) => {
     });
 
     await order.save();
+
     res.json({ success: true, sessionId: session.id });
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error('Error creating checkout session:', error.message);
     res.status(500).json({ message: error.message || 'Internal server error' });
   }
 });
@@ -76,10 +80,11 @@ router.get('/session-status', userAuth, async (req, res) => {
     if (!orderDetails) {
       return res.status(400).json({ message: 'Order not found' });
     }
+
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
     if (session?.payment_status === 'paid') {
-      await Order.findOneAndUpdate(
+      const updatedOrder = await Order.findOneAndUpdate(
         { sessionId: session_id },
         {
           paymentStatus: 'Completed',
@@ -88,11 +93,28 @@ router.get('/session-status', userAuth, async (req, res) => {
         { new: true }
       );
 
+      const updateStockPromises = updatedOrder.products.map(async (product) => {
+        const dbProduct = await Product.findById(product.productId);
+        if (dbProduct) {
+          if (dbProduct.countInStock >= product.quantity) {
+            dbProduct.countInStock -= product.quantity;
+            dbProduct.unitsSold += product.quantity;
+            await dbProduct.save();
+          } else {
+            console.warn(
+              `Product ID: ${product.productId} has insufficient stock.`
+            );
+          }
+        }
+      });
+
+      await Promise.all(updateStockPromises);
+
       res.json({
         success: true,
-        message: 'Payment completed successfully',
+        message: 'Payment completed successfully and stock updated.',
         sessionDetails: session,
-        orderDetails: orderDetails,
+        orderDetails: updatedOrder,
       });
     } else {
       res.json({

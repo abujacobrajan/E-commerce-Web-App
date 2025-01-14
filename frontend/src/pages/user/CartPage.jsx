@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { axiosInstance } from '../../config/axiosInstance.js';
 import { loadStripe } from '@stripe/stripe-js';
+import toast from 'react-hot-toast';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState(null);
@@ -59,6 +60,15 @@ const CartPage = () => {
 
   const updateQuantity = async (productId, newQuantity) => {
     if (newQuantity < 1) return;
+
+    const product = cartItems.products.find(
+      (item) => item.productId._id === productId
+    );
+
+    if (newQuantity > product.productId.countInStock) {
+      toast.error(`Only ${product.productId.countInStock} items in stock.`);
+      return;
+    }
 
     try {
       const response = await axiosInstance({

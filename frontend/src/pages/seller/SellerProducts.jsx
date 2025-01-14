@@ -140,106 +140,98 @@ const SellerProducts = () => {
                 </div>
                 {editProductId === product._id ? (
                   <div className="row mt-3">
-                    <div className="col-12">
-                      <div className="row mb-2">
-                        <label className="col-sm-3 col-form-label">
-                          Product Name:
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            name="name"
-                            value={editedProduct.name}
-                            onChange={handleInputChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-                      <div className="row mb-2">
-                        <label className="col-sm-3 col-form-label">
-                          Brand:
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            name="brand"
-                            value={editedProduct.brand}
-                            onChange={handleInputChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-                      <div className="row mb-2">
-                        <label className="col-sm-3 col-form-label">
-                          Price:
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            name="price"
-                            value={editedProduct.price}
-                            onChange={handleInputChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-                      <div className="row mb-2">
-                        <label className="col-sm-3 col-form-label">
-                          Category:
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            name="category"
-                            value={editedProduct.category}
-                            onChange={handleInputChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-                      <div className="row mb-2">
-                        <label className="col-sm-3 col-form-label">
-                          Count In Stock:
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="number"
-                            name="countInStock"
-                            value={editedProduct.countInStock}
-                            onChange={handleInputChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-                      <div className="row mb-2">
-                        <label className="col-sm-3 col-form-label">
-                          Description:
-                        </label>
-                        <div className="col-sm-9">
-                          <textarea
-                            name="description"
-                            value={editedProduct.description}
-                            onChange={handleInputChange}
-                            className="form-control"
-                          ></textarea>
-                        </div>
-                      </div>
-                      <div className="d-flex justify-content-end">
-                        <button
-                          type="button"
-                          className="btn btn-outline-success me-2"
-                          onClick={saveChanges}
-                        >
-                          Save
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-outline-secondary"
-                          onClick={cancelEdit}
-                        >
-                          Cancel
-                        </button>
-                      </div>
+                    <div className="col-md-6 mb-2">
+                      <label htmlFor="name" className="form-label">
+                        Product Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        className="form-control"
+                        value={editedProduct.name}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-6 mb-2">
+                      <label htmlFor="brand" className="form-label">
+                        Brand
+                      </label>
+                      <input
+                        type="text"
+                        id="brand"
+                        name="brand"
+                        className="form-control"
+                        value={editedProduct.brand}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-6 mb-2">
+                      <label htmlFor="price" className="form-label">
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        className="form-control"
+                        value={editedProduct.price}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-6 mb-2">
+                      <label htmlFor="category" className="form-label">
+                        Category
+                      </label>
+                      <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        className="form-control"
+                        value={editedProduct.category}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-6 mb-2">
+                      <label htmlFor="countInStock" className="form-label">
+                        Count In Stock
+                      </label>
+                      <input
+                        type="number"
+                        id="countInStock"
+                        name="countInStock"
+                        className="form-control"
+                        value={editedProduct.countInStock}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-md-12 mb-2">
+                      <label htmlFor="description" className="form-label">
+                        Description
+                      </label>
+                      <textarea
+                        id="description"
+                        name="description"
+                        className="form-control"
+                        value={editedProduct.description}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="d-flex justify-content-end mt-3">
+                      <button
+                        type="button"
+                        className="btn btn-outline-success me-2"
+                        onClick={saveChanges}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={cancelEdit}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -247,6 +239,7 @@ const SellerProducts = () => {
                     <h3>{product.name}</h3>
                     <p>Price: Rs.{product.price}</p>
                     <p>{product.description}</p>
+                    <p>Units Sold: {product.unitsSold || 0}</p>
                     <button
                       type="button"
                       className="btn btn-outline-danger me-2"
