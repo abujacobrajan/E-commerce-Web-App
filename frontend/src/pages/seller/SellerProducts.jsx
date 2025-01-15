@@ -239,7 +239,16 @@ const SellerProducts = () => {
                     <h3>{product.name}</h3>
                     <p>Price: Rs.{product.price}</p>
                     <p>{product.description}</p>
-                    <p>Units Sold: {product.unitsSold || 0}</p>
+                    <p>
+                      <strong>Units Sold:</strong>
+                      {product.unitsSold || 0}
+                    </p>
+                    <p>
+                      <strong>In Stock: </strong>
+                      {product.countInStock > 0
+                        ? product.countInStock
+                        : 'Out of Stock'}
+                    </p>
                     <button
                       type="button"
                       className="btn btn-outline-danger me-2"
